@@ -1,0 +1,16 @@
+{
+  "name": "dungeonsgame",
+  "version": "1.0.0",
+  "description": "Rogue-Like Game",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "Sanford Leach",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^2.0.2",
+    "shortid": "^2.2.15",
+    "socket.io": "^2.3.0"
+  }
+}
