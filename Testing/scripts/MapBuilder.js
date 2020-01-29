@@ -44,9 +44,13 @@ const roomExistsAtCoords = (x, y) => {
 let center = { x: WIDTH / 2, y: HEIGHT / 2};
 
 const drawRoom = (x, y) => {
-    // Draw Big Black Square
-    ctx.fillStyle = 'black';
+    // Draw Big White Square on bottom
+    ctx.fillStyle = 'white';
     ctx.fillRect(center.x - 25 + (50 * x), center.y - 25 + (50 * y), 50, 50);
+
+    // Draw 1px smaller Black Square in middle
+    ctx.fillStyle = 'black';
+    ctx.fillRect(center.x - 24 + (50 * x), center.y - 24 + (50 * y), 48, 48);
 
     // Draw Small White Square On Top
     ctx.fillStyle = 'white';
@@ -85,8 +89,6 @@ class Room {
 
         floor[numRooms++] = this;
 
-        if(this.id === 0) drawStart()
-
         drawRoom(x, y);
     }
 } 
@@ -99,9 +101,15 @@ while(numRooms < maxRooms && doorwaysRemain) {
     if(numRooms === 0) { // First Room
         let curRoom = new Room('URDL', 0, 0);
         roomQueue.push(curRoom);
+        // drawStart();
     } else {
         curRoom = roomQueue.pop(); 
-        if (!curRoom) doorwaysRemain = false
+        if (!curRoom) {
+            // Draw End Room in cases where we don't reach 10
+            // const lastRoom = floor.pop();
+            // drawEnd(lastRoom.x, lastRoom.y);
+            doorwaysRemain = false
+        }
         else {
             if (curRoom.up && !curRoom.roomUp && !roomExistsAtCoords(curRoom.x, curRoom.y + 1)) {
                 let newRoom = new Room(pickRandomRoom(roomOptions.DOWN), curRoom.x, curRoom.y + 1);
