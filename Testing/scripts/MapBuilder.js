@@ -111,27 +111,27 @@ while(numRooms < maxRooms && doorwaysRemain) {
             doorwaysRemain = false
         }
         else {
-            if (curRoom.up && !curRoom.roomUp && !roomExistsAtCoords(curRoom.x, curRoom.y + 1)) {
-                let newRoom = new Room(pickRandomRoom(roomOptions.DOWN), curRoom.x, curRoom.y + 1);
+            if (curRoom.up && !curRoom.roomUp && !roomExistsAtCoords(curRoom.x, curRoom.y - 1)) {
+                let newRoom = new Room(pickRandomRoom(roomOptions.DOWN), curRoom.x, curRoom.y - 1);
                 roomQueue.unshift(newRoom);
                 roomQueue.push(curRoom);
-                curRoom.roomDown = newRoom;
+                curRoom.roomUp = newRoom;
                 continue;
             } else if (curRoom.right && !curRoom.roomRight && !roomExistsAtCoords(curRoom.x + 1, curRoom.y)) {
                 let newRoom = new Room(pickRandomRoom(roomOptions.LEFT), curRoom.x + 1, curRoom.y);
                 roomQueue.unshift(newRoom);
                 roomQueue.push(curRoom);
-                curRoom.roomDown = newRoom;
-            } else if (curRoom.down && !curRoom.roomDown && !roomExistsAtCoords(curRoom.x, curRoom.y - 1)) {
-                let newRoom = new Room(pickRandomRoom(roomOptions.UP), curRoom.x, curRoom.y - 1);
-                roomQueue.unshift(newRoom);
+                curRoom.roomRight = newRoom;
+            } else if (curRoom.down && !curRoom.roomDown && !roomExistsAtCoords(curRoom.x, curRoom.y + 1)) {
+                let newRoom = new Room(pickRandomRoom(roomOptions.UP), curRoom.x, curRoom.y + 1)
+                roomQueue.unshift(newRoom)
                 roomQueue.push(curRoom);
                 curRoom.roomDown = newRoom;
             } else if (curRoom.left && !curRoom.roomLeft && !roomExistsAtCoords(curRoom.x - 1, curRoom.y)) {
                 let newRoom = new Room(pickRandomRoom(roomOptions.RIGHT), curRoom.x - 1, curRoom.y);
                 roomQueue.unshift(newRoom);
                 roomQueue.push(curRoom);
-                curRoom.roomDown = newRoom;
+                curRoom.roomLeft = newRoom;
             } else {
                 // All doorways have a room or are blocked
                 continue;
