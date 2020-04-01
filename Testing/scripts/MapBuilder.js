@@ -19,14 +19,21 @@ $(window).resize(function () {
     HEIGHT = $(window).height();
 });
 
+// const roomOptions = {
+//     UP:     ['U', 'UR', 'UD', 'UL', 'URD', 'URL', 'UDL', 'URDL'],
+//     RIGHT:  ['R', 'UR', 'RD', 'RL', 'URD', 'URL', 'RDL', 'URDL'],
+//     DOWN:   ['D', 'UD', 'RD', 'DL', 'URD', 'UDL', 'RDL', 'URDL'],
+//     LEFT:   ['L', 'UL', 'RL', 'DL', 'URL', 'UDL', 'RDL', 'URDL']
+// }
+
+// More Hallways
 const roomOptions = {
-    UP:     ['U', 'UR', 'UD', 'UL', 'URD', 'URL', 'UDL', 'URDL'],
-    RIGHT:  ['R', 'UR', 'RD', 'RL', 'URD', 'URL', 'RDL', 'URDL'],
-    DOWN:   ['D', 'UD', 'RD', 'DL', 'URD', 'UDL', 'RDL', 'URDL'],
-    LEFT:   ['L', 'UL', 'RL', 'DL', 'URL', 'UDL', 'RDL', 'URDL']
+    UP:     ['U', 'UR', 'UR', 'UD', 'UD', 'UD', 'UD', 'UL', 'UL', 'URD', 'URL', 'UDL', 'URDL'],
+    RIGHT:  ['R', 'UR', 'UR', 'RD', 'RD', 'RL', 'RL', 'RL', 'RL', 'URD', 'URL', 'RDL', 'URDL'],
+    DOWN:   ['D', 'UD', 'UD', 'UD', 'UD', 'RD', 'RD', 'DL', 'DL', 'URD', 'UDL', 'RDL', 'URDL'],
+    LEFT:   ['L', 'UL', 'UL', 'RL', 'RL', 'RL', 'RL', 'DL', 'DL', 'URL', 'UDL', 'RDL', 'URDL']
 }
 
-const maxRooms = 10;
 let numRooms = 0;
 let doorwaysRemain = true;
 
@@ -64,9 +71,10 @@ const drawStart = () => {
     ctx.fill(); 
 }
 
-const drawEnd = (x, y) => {
+const drawEnd = () => {
+    const end = floor[floor.length - 1];
     ctx.beginPath();
-    ctx.arc(center.x + (50 * x), center.y + (50 * y), 5, 0, 2 * Math.PI);
+    ctx.arc(center.x + (50 * end.x), center.y + (50 * end.y), 5, 0, 2 * Math.PI);
     ctx.fillStyle = 'red';
     ctx.fill(); 
 }
@@ -97,54 +105,100 @@ class Room {
 
 const roomQueue = [];
 
-while(numRooms < maxRooms && doorwaysRemain) {
-    if(numRooms === 0) { // First Room
-        let curRoom = new Room('URDL', 0, 0);
-        roomQueue.push(curRoom);
-        // drawStart();
-    } else {
-        curRoom = roomQueue.pop(); 
-        if (!curRoom) {
-            // Draw End Room in cases where we don't reach 10
-            // const lastRoom = floor.pop();
-            // drawEnd(lastRoom.x, lastRoom.y);
-            doorwaysRemain = false
-        }
-        else {
-            if (curRoom.up && !curRoom.roomUp && !roomExistsAtCoords(curRoom.x, curRoom.y - 1)) {
-                let newRoom = new Room(pickRandomRoom(roomOptions.DOWN), curRoom.x, curRoom.y - 1);
-                roomQueue.unshift(newRoom);
-                roomQueue.push(curRoom);
-                curRoom.roomUp = newRoom;
-                continue;
-            } else if (curRoom.right && !curRoom.roomRight && !roomExistsAtCoords(curRoom.x + 1, curRoom.y)) {
-                let newRoom = new Room(pickRandomRoom(roomOptions.LEFT), curRoom.x + 1, curRoom.y);
-                roomQueue.unshift(newRoom);
-                roomQueue.push(curRoom);
-                curRoom.roomRight = newRoom;
-            } else if (curRoom.down && !curRoom.roomDown && !roomExistsAtCoords(curRoom.x, curRoom.y + 1)) {
-                let newRoom = new Room(pickRandomRoom(roomOptions.UP), curRoom.x, curRoom.y + 1)
-                roomQueue.unshift(newRoom)
-                roomQueue.push(curRoom);
-                curRoom.roomDown = newRoom;
-            } else if (curRoom.left && !curRoom.roomLeft && !roomExistsAtCoords(curRoom.x - 1, curRoom.y)) {
-                let newRoom = new Room(pickRandomRoom(roomOptions.RIGHT), curRoom.x - 1, curRoom.y);
-                roomQueue.unshift(newRoom);
-                roomQueue.push(curRoom);
-                curRoom.roomLeft = newRoom;
-            } else {
-                // All doorways have a room or are blocked
-                continue;
+const generateRooms = async (maxRooms) => {
+    while(numRooms < maxRooms && doorwaysRemain) {
+        if(numRooms === 0) { // First Room
+            let curRoom = new Room('URDL', 0, 0);
+            roomQueue.push(curRoom);
+            // drawStart();
+        } else {
+            curRoom = roomQueue.pop(); 
+            if (!curRoom) {
+                // Draw End Room in cases where we don't reach 10
+                // const lastRoom = floor.pop();
+                // drawEnd(lastRoom.x, lastRoom.y);
+                doorwaysRemain = false
+            }
+            else {
+                if (curRoom.up && !curRoom.roomUp && !roomExistsAtCoords(curRoom.x, curRoom.y - 1)) {
+                    let newRoom = new Room(pickRandomRoom(roomOptions.DOWN), curRoom.x, curRoom.y - 1);
+                    roomQueue.unshift(newRoom);
+                    roomQueue.push(curRoom);
+                    curRoom.roomUp = newRoom;
+                    continue;
+                } else if (curRoom.right && !curRoom.roomRight && !roomExistsAtCoords(curRoom.x + 1, curRoom.y)) {
+                    let newRoom = new Room(pickRandomRoom(roomOptions.LEFT), curRoom.x + 1, curRoom.y);
+                    roomQueue.unshift(newRoom);
+                    roomQueue.push(curRoom);
+                    curRoom.roomRight = newRoom;
+                } else if (curRoom.down && !curRoom.roomDown && !roomExistsAtCoords(curRoom.x, curRoom.y + 1)) {
+                    let newRoom = new Room(pickRandomRoom(roomOptions.UP), curRoom.x, curRoom.y + 1)
+                    roomQueue.unshift(newRoom)
+                    roomQueue.push(curRoom);
+                    curRoom.roomDown = newRoom;
+                } else if (curRoom.left && !curRoom.roomLeft && !roomExistsAtCoords(curRoom.x - 1, curRoom.y)) {
+                    let newRoom = new Room(pickRandomRoom(roomOptions.RIGHT), curRoom.x - 1, curRoom.y);
+                    roomQueue.unshift(newRoom);
+                    roomQueue.push(curRoom);
+                    curRoom.roomLeft = newRoom;
+                } else {
+                    // All doorways have a room or are blocked
+                    continue;
+                }
             }
         }
     }
 }
 
-// Go through rooms array and close doors
-floor.forEach((room) => {
-    if(room.up && !room.roomUp) room.up = false;
-    if(room.right && !room.roomright) room.right = false;
-    if(room.down && !room.roomdown) room.down = false;
-    if(room.left && !room.roomleft) room.left = false;
-});
+const connectRooms = () => {
+    // Go through rooms array and close doors
+    floor.forEach((room) => {
+        if(room.up && !room.roomUp) room.up = false;
+        if(room.right && !room.roomRight) room.right = false;
+        if(room.down && !room.roomDown) room.down = false;
+        if(room.left && !room.roomLeft) room.left = false;
+    });
+}
 
+// ctx.arc(center.x + (50 * end.x), center.y + (50 * end.y), 5, 0, 2 * Math.PI);
+
+const getLocationX = (x) => {
+    return center.x + (50 * x);
+}
+
+const getLocationY = (y) => {
+    return center.y + (50 * y);
+}
+
+const drawDoors = () => {
+    ctx.beginPath();
+    floor.forEach((room) => {
+        if (room.roomUp) {
+            ctx.moveTo(getLocationX(room.x), getLocationY(room.y));
+            ctx.lineTo(getLocationX(room.x), getLocationY(room.y) - 50);
+        }
+        if (room.roomRight) {
+            ctx.moveTo(getLocationX(room.x), getLocationY(room.y));
+            ctx.lineTo(getLocationX(room.x) + 50, getLocationY(room.y));
+        }
+        if (room.roomDown) {
+            ctx.moveTo(getLocationX(room.x), getLocationY(room.y));
+            ctx.lineTo(getLocationX(room.x), getLocationY(room.y) + 50);
+        }
+        if (room.roomLeft) {
+            ctx.moveTo(getLocationX(room.x), getLocationY(room.y));
+            ctx.lineTo(getLocationX(room.x) - 50, getLocationY(room.y));
+        }
+    });
+    ctx.stroke();
+}
+
+const run = async () => {
+    await generateRooms(20);
+    connectRooms();
+    drawDoors();
+    drawStart();
+    drawEnd();
+}
+
+run();
