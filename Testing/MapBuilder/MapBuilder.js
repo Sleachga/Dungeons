@@ -106,6 +106,7 @@ class Room {
 const roomQueue = [];
 
 const generateRooms = async (maxRooms) => {
+    ctx.clearRect(0, 0, WIDTH, HEIGHT);
     while(numRooms < maxRooms && doorwaysRemain) {
         if(numRooms === 0) { // First Room
             let curRoom = new Room('URDL', 0, 0);
@@ -172,6 +173,8 @@ const getLocationY = (y) => {
 
 const drawDoors = () => {
     ctx.beginPath();
+    ctx.strokeStyle = 'grey';
+    ctx.lineWidth = 2;
     floor.forEach((room) => {
         if (room.roomUp) {
             ctx.moveTo(getLocationX(room.x), getLocationY(room.y));
@@ -193,8 +196,8 @@ const drawDoors = () => {
     ctx.stroke();
 }
 
-const run = async () => {
-    await generateRooms(20);
+const run = async (numRooms = 20) => {
+    await generateRooms(numRooms);
     connectRooms();
     drawDoors();
     drawStart();
@@ -202,3 +205,7 @@ const run = async () => {
 }
 
 run();
+
+$(document).on('input change', '#numRooms', () => {
+    run($('#numRooms').val())
+});
