@@ -27,7 +27,7 @@ const ALL_SOCKETS = {};
 const SERVER_SOCKETS = {};
 const USER_SOCKETS = {};
 
-const MAX_SERVERS = 1;
+const MAX_SERVERS = 10;
 const MAX_USERS = 100; // Maximum mobile users allowed per server
 const MAX_CONNECTIONS = 100; // Maximum total connections on the page
 
