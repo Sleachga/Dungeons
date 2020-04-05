@@ -73,12 +73,26 @@ io.sockets.on('connection', (socket) => {
             	socket.emit('maximum-servers');
             }
         });
+
+        socket.on('rejoin-server-request', (serverCode) => {
+            if (SERVERS[serverCode]) {
+                _.set(SERVER_SOCKETS, `${socket.id}.serverCode`, serverCode);
+                socket.emit('rejoin-server-success');
+            } else {
+                socket.emit('rejoin-server-failure');
+            }
+        });
+
+        socket.on('stop-server', () => {
+            _.unset(SERVERS, `SERVER_SOCKETS.${socket.id}.serverCode`);
+            _.unset(SERVER_SOCKETS, `${socket.id}`);
+        });
         
         // Fires when someone leaves the page
         // Deletes the socket from ALL_SOCKETS
         socket.on('disconnect', () => { 
             console.log(`[DISCONNECT] ${socket.id}`);
-            _.unset(SERVERS, `SERVER_SOCKETS.${socket.id}.serverCode`); // TODO: Add serverCode in localStorage and try to rejoin same session on refresh
+            _.unset(SERVERS, `SERVER_SOCKETS.${socket.id}.serverCode`);
             _.unset(USER_SOCKETS, `${socket.id}`);
             _.unset(SERVER_SOCKETS, `${socket.id}`);
             _.unset(ALL_SOCKETS, `${socket.id}`);

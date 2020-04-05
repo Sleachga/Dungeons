@@ -1,5 +1,5 @@
-.canvas-container {
-    flex-direction: column;
+.column {
+    flex-direction: column; 
 }
 
 .container {
@@ -29,11 +29,16 @@
     height: 500px;
 }
 
-#create-server {
-    margin: 10px;
+.button {
+    margin: 20px;
     border: 1px solid black;
 }
 
 #login-code {
+    display: none;
+    margin: 20px 0 0 0;
+}
+
+#stop-server {
     display: none;
 }
