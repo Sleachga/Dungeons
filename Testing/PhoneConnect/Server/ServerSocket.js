@@ -71,4 +71,8 @@ $(() => {
     socket.on('rejoin-server-failure', () => {
         localStorage.removeItem('serverCode'); 
     });
+
+    socket.on('maximum-servers', () => {
+        alert('Sorry, server limit reached');
+    });
 })

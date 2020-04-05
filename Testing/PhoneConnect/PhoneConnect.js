@@ -67,7 +67,7 @@ io.sockets.on('connection', (socket) => {
 
                 SERVER_SOCKETS[socket.id].serverCode = newServerCode;
 
-           		console.log(`New Server Created: ${newServerCode}`);
+           		console.log(`[SERVER CREATE]: ${newServerCode}`);
            		socket.emit('new-server-code', newServerCode);
             } else {
             	socket.emit('maximum-servers');
@@ -84,6 +84,7 @@ io.sockets.on('connection', (socket) => {
         });
 
         socket.on('stop-server', () => {
+            console.log(`[SERVER STOP]: ${_.get(SERVER_SOCKETS, `${socket.id}.serverCode`)}`);
             _.unset(SERVERS, `SERVER_SOCKETS.${socket.id}.serverCode`);
             _.unset(SERVER_SOCKETS, `${socket.id}`);
         });
