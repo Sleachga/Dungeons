@@ -1,3 +1,65 @@
+
+
+@media only screen 
+and (min-device-width : 375px) 
+and (max-device-width : 812px)
+and (-webkit-device-pixel-ratio : 3) {
+    .arrow-key {
+        width: 200px;
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .clickable {
+        background-color: lightgreen;
+        margin: 30px;
+        border: 3px solid black;
+    }
+
+    .clickable:hover {
+        background-color: rgb(106, 141, 106);
+        margin: 30px;
+    }
+
+    #color {
+        width: 300px;
+        height: 300px;
+    }
+
+    .color-text {
+        font-size: 50px;
+        margin-top: 100px;
+        margin-bottom: 30px;
+    }
+
+    .color-div {
+        height: 100%;
+        width: 100%;
+    }
+
+    .arrows-div {
+        margin-top: 300px;
+    }
+}
+
+@media only screen and (-webkit-device-pixel-ratio : 1) {
+    .arrow-key {
+        width: 100px;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .clickable {
+        background-color: lightblue;
+        margin: 10px;
+        border: 1px solid black;
+    }
+}
+
 .column {
     flex-direction: column; 
 }
@@ -6,6 +68,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+}
+
+.button {
+	width: 100%;
+	height: 100px;
+	border: 1px solid red;
 }
 
 .user {
@@ -31,6 +104,12 @@
 
 .button {
     margin: 20px;
+    border: 2px solid black;
+    width: 100px;
+    height: 50px;
+}
+
+.border {
     border: 1px solid black;
 }
 
@@ -41,4 +120,8 @@
 
 #stop-server {
     display: none;
+}
+
+#instructions {
+    margin: 0;
 }

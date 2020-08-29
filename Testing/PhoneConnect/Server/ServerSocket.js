@@ -9,6 +9,7 @@ const stopServer = (ctx, socket) => {
     $('#login-code').hide();
     $('#stop-server').hide();
     $('#start-server').show();
+    $('#instructions').html('');
 
     clearInterval(drawingLoop);
 
@@ -57,6 +58,7 @@ $(() => {
 
         drawingLoop = setInterval(() => drawGrid(ctx), 1000 / 40)
         $('#stop-server').show();
+        $('#instructions').html(`Please open mobile app and type in ${data}`);
     });
 
     socket.on('rejoin-server-success', () => {
@@ -64,6 +66,8 @@ $(() => {
         $('#login-code').show();
         $('#login-code').html(`Server Code: ${localStorage.getItem('serverCode')}`);
         $('#stop-server').show();
+
+        $('#instructions').html(`Please navigate to <a target="_blank" href="${window.location.href}mobile">${window.location.href}mobile</a> on your mobile device and input the code above.`)
 
         drawingLoop = setInterval(() => drawGrid(ctx), 1000 / 40)
     });

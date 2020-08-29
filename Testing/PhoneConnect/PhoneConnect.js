@@ -19,7 +19,7 @@ app.use(express.static(__dirname));
 app.use(express.static(__dirname + '/Server'));
 app.use(express.static(__dirname + '/Mobile'));
 
-const port = process.env.PORT || 1997;
+const port = process.env.PORT || 80;
 server.listen(port);
 console.log(`Server started... http://localhost:${port} or ${ip.address()}:${port}`);
 
@@ -28,7 +28,7 @@ const SERVER_SOCKETS = {};
 const USER_SOCKETS = {};
 
 const MAX_SERVERS = 10;
-const MAX_USERS = 100; // Maximum mobile users allowed per server
+const MAX_USERS = 4; // Maximum mobile users allowed per server
 const MAX_CONNECTIONS = 100; // Maximum total connections on the page
 
 const SERVERS = {};
@@ -47,6 +47,8 @@ io.sockets.on('connection', (socket) => {
         socket.id = uuid.v4();
         ALL_SOCKETS[socket.id] = socket;
         console.log(`[CONNECT] ${socket.id}`)
+
+        socket.emit('ip', `${ip.address()}:${port}`);
 
         socket.on('new-server-req', () => {
             if (Object.keys(SERVER_SOCKETS).length <= MAX_SERVERS) {

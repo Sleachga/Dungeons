@@ -5,9 +5,16 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Debug in Exponent",
+            "cwd": "${workspaceFolder}/Testing/PhoneConnect/ReactNative/PhoneConnectMobile",
+            "type": "reactnative",
+            "request": "launch",
+            "platform": "exponent"
+        },
+        {
             "type": "node",
             "request": "launch",
-            "name": "nodemon",
+            "name": "nodemon - server",
             "runtimeExecutable": "nodemon",
             "program": "${workspaceFolder}/Testing/PhoneConnect/PhoneConnect.js",
             "restart": true,
