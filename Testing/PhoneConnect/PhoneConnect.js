@@ -8,8 +8,6 @@ const _ = require("lodash");
 const Server = require("./Classes/Server");
 const User = require("./Classes/User");
 
-
-
 // Tells the server where the html file is
 app.get("/", function (req, res) {
   res.sendFile(__dirname + "/Server/PhoneConnectServer.html");
@@ -104,7 +102,27 @@ io.sockets.on("connection", (socket) => {
     });
 
     socket.on("set-user-color", (color) => {
-      USERS[socket.id].color = color;
+      USERS[socket.id].color = color.color; // TODO: figure out why this is color.color and not color
+
+      if (!USERS[socket.id].x && !USERS[socket.id].y) {
+        // Assign x and y values uniquely
+        let x, y;
+        do {
+          x = Math.floor(Math.random() * 9);
+          y = Math.floor(Math.random() * 9);
+        } while (
+          Object.keys(USERS)
+            .map((key) => USERS[key].x)
+            .includes(x) &&
+          Object.keys(USERS)
+            .map((key) => USERS[key].y)
+            .includes(y)
+        );
+
+        USERS[socket.id].x = x;
+        USERS[socket.id].y = y;
+      }
+
       const curServer = USERS[socket.id].server;
       const users = getServerData(curServer);
       curServer.socket.emit("username-update", users);
@@ -161,6 +179,8 @@ io.sockets.on("connection", (socket) => {
       console.log(
         `[SERVER STOP]: ${_.get(SERVERS, `${socket.id}.serverCode`)}`
       );
+
+      // TODO: There's more stuff to unset here probably
       _.unset(SERVERS, `${socket.id}.serverCode`);
     });
 

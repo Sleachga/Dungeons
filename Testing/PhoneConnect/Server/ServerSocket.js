@@ -20,6 +20,8 @@ const stopServer = (ctx, socket) => {
   localStorage.removeItem("serverCode");
 };
 
+let users = [];
+
 const GRID_WIDTH = 50;
 const drawGrid = (ctx) => {
   ctx.lineWidth = 1;
@@ -31,7 +33,11 @@ const drawGrid = (ctx) => {
     ctx.moveTo(0, i);
     ctx.lineTo(500, i);
   }
+
   ctx.stroke();
+  
+  // Draw User Boxes
+  drawUserBoxes(ctx, users);
 };
 
 const drawUserBoxes = (ctx, users) => {
@@ -93,18 +99,10 @@ $(() => {
     alert("Sorry, server limit reached");
   });
 
-  socket.on("username-update", (users) => {
-
-    for(let i = 0; i < users.length; i++) {
-        $(`#u${i+1}`).text(users[i].username);
+  socket.on("username-update", (usersArr) => {
+    for(let i = 0; i < usersArr.length; i++) {
+        $(`#u${i+1}`).text(usersArr[i].username);
+        users = usersArr;
     }
-
-    clearInterval(drawingLoop);
-    ctx.clearRect(0, 0, 500, 500);
-    
-    drawingLoop = setInterval(() => {
-        drawGrid(ctx), 1000 / 40;
-        drawUserBoxes(ctx, users);
-    });
   });
 });

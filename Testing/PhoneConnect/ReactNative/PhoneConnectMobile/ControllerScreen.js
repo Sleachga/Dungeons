@@ -30,8 +30,6 @@ class ControllerScreen extends Component {
 
   setColor(color) {
     this.setState({ color });
-    
-
     this.socket.emit("set-user-color", { color });
   }
 
