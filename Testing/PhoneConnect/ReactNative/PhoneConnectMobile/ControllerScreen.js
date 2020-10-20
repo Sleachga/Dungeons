@@ -33,6 +33,10 @@ class ControllerScreen extends Component {
     this.socket.emit("set-user-color", { color });
   }
 
+  directionPressed(direction) {
+    this.socket.emit('arrow', direction);
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -67,7 +71,7 @@ class ControllerScreen extends Component {
               borderBottomWidth: 0,
               backgroundColor: this.state.color,
             }}
-            onPress={() => {}}
+            onPress={() => this.directionPressed('up')}
           >
             <FontAwesomeIcon icon={faArrowUp} />
           </TouchableOpacity>
@@ -82,7 +86,7 @@ class ControllerScreen extends Component {
               borderRightWidth: 0,
               backgroundColor: this.state.color,
             }}
-            onPress={() => {}}
+            onPress={() => this.directionPressed('left')}
           >
             <FontAwesomeIcon icon={faArrowLeft} />
           </TouchableOpacity>
@@ -102,7 +106,7 @@ class ControllerScreen extends Component {
               borderLeftWidth: 0,
               backgroundColor: this.state.color,
             }}
-            onPress={() => {}}
+            onPress={() => this.directionPressed('right')}
           >
             <FontAwesomeIcon icon={faArrowRight} />
           </TouchableOpacity>
@@ -117,7 +121,7 @@ class ControllerScreen extends Component {
               borderTopWidth: 0,
               backgroundColor: this.state.color,
             }}
-            onPress={() => {}}
+            onPress={() => this.directionPressed('down')}
           >
             <FontAwesomeIcon icon={faArrowDown} />
           </TouchableOpacity>

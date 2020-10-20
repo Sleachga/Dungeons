@@ -101,8 +101,36 @@ io.sockets.on("connection", (socket) => {
       curServer.socket.emit("username-update", users);
     });
 
+    socket.on("arrow", (direction) => {
+      switch (direction) {
+        case "up":
+          if (USERS[socket.id].y > 0) USERS[socket.id].y--;
+          break;
+        case "left":
+          if (USERS[socket.id].x > 0) USERS[socket.id].x--;
+          break;
+        case "right":
+          if (USERS[socket.id].x < 9) USERS[socket.id].x++;
+          break;
+        case "down":
+          if (USERS[socket.id].y < 9) USERS[socket.id].y++;
+          break;
+        default:
+          console.log("HOW DID THIS HAPPEN...");
+      }
+
+      const curServer = USERS[socket.id].server;
+      const users = getServerData(curServer);
+      curServer.socket.emit("username-update", users);
+    });
+
     socket.on("set-user-color", (color) => {
-      USERS[socket.id].color = color.color; // TODO: figure out why this is color.color and not color
+      const userKeys = Object.keys(USERS);
+
+      // Don't allow duplicate colors, TODO: send colors picked and grey out on client
+      if (!userKeys.map((key) => USERS[key].color).includes(color)) {
+        USERS[socket.id].color = color.color; // TODO: figure out why this is color.color and not color
+      }
 
       if (!USERS[socket.id].x && !USERS[socket.id].y) {
         // Assign x and y values uniquely
@@ -111,12 +139,8 @@ io.sockets.on("connection", (socket) => {
           x = Math.floor(Math.random() * 9);
           y = Math.floor(Math.random() * 9);
         } while (
-          Object.keys(USERS)
-            .map((key) => USERS[key].x)
-            .includes(x) &&
-          Object.keys(USERS)
-            .map((key) => USERS[key].y)
-            .includes(y)
+          userKeys.map((key) => USERS[key].x).includes(x) &&
+          userKeys.map((key) => USERS[key].y).includes(y)
         );
 
         USERS[socket.id].x = x;
